@@ -69,7 +69,17 @@ namespace TesseractWrapper {
 		auto ptess = std::make_shared<tesseract::TessBaseAPI>();
 
 		auto dbFolderPath = GetExeDirectory() / L"tessdata";
-		if (ptess->Init(dbFolderPath.string().c_str(), s_language.c_str())) {
+		auto tryInit = [&](const std::wstring& subdir) -> bool {
+			auto path = subdir.empty() ? dbFolderPath : (dbFolderPath / subdir);
+			// Try configured language first, then fallback to jpn if missing
+			if (ptess->Init(path.string().c_str(), s_language.c_str()) == 0) return true;
+			if (s_language != std::string("jpn") && ptess->Init(path.string().c_str(), "jpn") == 0) {
+				INFO_LOG << L"Tesseract language not found, fell back to jpn.";
+				return true;
+			}
+			return false;
+		};
+		if (!tryInit(L"")) {
 			ERROR_LOG << L"Could not initialize tesseract.";
 			ATLASSERT(FALSE);
 			throw std::runtime_error("Could not initialize tesseract.");
@@ -114,7 +124,13 @@ namespace TesseractWrapper {
 			INFO_LOG << L"new tesseract::TessBaseAPI";
 			ptess.reset(new tesseract::TessBaseAPI);
 			auto dbFolderPath = GetExeDirectory() / L"tessdata";
-			if (ptess->Init(dbFolderPath.string().c_str(), s_language.c_str())) {
+			auto tryInit = [&](const std::wstring& subdir) -> bool {
+				auto path = subdir.empty() ? dbFolderPath : (dbFolderPath / subdir);
+				if (ptess->Init(path.string().c_str(), s_language.c_str()) == 0) return true;
+				if (s_language != std::string("jpn") && ptess->Init(path.string().c_str(), "jpn") == 0) return true;
+				return false;
+			};
+			if (!tryInit(L"")) {
 				ERROR_LOG << L"Could not initialize tesseract.";
 				ATLASSERT(FALSE);
 				return L"";
@@ -150,7 +166,12 @@ namespace TesseractWrapper {
 			INFO_LOG << L"new tesseract::TessBaseAPI";
 			ptess.reset(new tesseract::TessBaseAPI);
 			auto dbFolderPath = GetExeDirectory() / L"tessdata" / L"best";
-			if (ptess->Init(dbFolderPath.string().c_str(), s_language.c_str())) {
+			auto tryInit = [&]() -> bool {
+				if (ptess->Init(dbFolderPath.string().c_str(), s_language.c_str()) == 0) return true;
+				if (s_language != std::string("jpn") && ptess->Init(dbFolderPath.string().c_str(), "jpn") == 0) return true;
+				return false;
+			};
+			if (!tryInit()) {
 				ERROR_LOG << L"Could not initialize tesseract.";
 				ATLASSERT(FALSE);
 				return L"";
