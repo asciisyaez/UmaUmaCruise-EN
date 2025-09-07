@@ -33,6 +33,7 @@ bool Config::LoadConfig()
 	windowTopMost = jsonSetting["Config"].value("WindowTopMost", windowTopMost);
 	screenShotFolder = UTF16fromUTF8(jsonSetting["Config"].value("ScreenShotFolder", ""));
 	screenCaptureMethod = jsonSetting["Config"].value("ScreenCaptureMethod", screenCaptureMethod);
+	dataLocale = jsonSetting["Config"].value("DataLocale", dataLocale);
 
     return true;
 }
@@ -55,6 +56,7 @@ void Config::SaveConfig()
 	jsonSetting["Config"]["WindowTopMost"] = windowTopMost;
 	jsonSetting["Config"]["ScreenShotFolder"] = UTF8fromUTF16(screenShotFolder.wstring());
 	jsonSetting["Config"]["ScreenCaptureMethod"] = screenCaptureMethod;
+	jsonSetting["Config"]["DataLocale"] = dataLocale;
 
 	std::ofstream ofs((GetExeDirectory() / "setting.json").wstring());
 	ofs << jsonSetting.dump(4);

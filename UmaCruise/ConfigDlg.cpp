@@ -27,6 +27,16 @@ LRESULT ConfigDlg::OnInitDialog(UINT, WPARAM, LPARAM, BOOL&)
 	}
 	m_cmbRefreshInterval.SetCurSel(m_config.refreshInterval - 1);
 
+	// Game Language (JP/EN)
+	if (CWindow(GetDlgItem(IDC_COMBO_GAMELANGUAGE)).IsWindow()) {
+		CComboBox cmbLang = GetDlgItem(IDC_COMBO_GAMELANGUAGE);
+		cmbLang.ResetContent();
+		cmbLang.AddString(L"Japanese (JP)");
+		cmbLang.AddString(L"English (EN)");
+		m_gameLanguage = static_cast<int>(m_config.dataLocale);
+		cmbLang.SetCurSel(m_gameLanguage);
+	}
+
 	CComboBox cmbTheme = GetDlgItem(IDC_COMBO_THEME);
 	LPCWSTR themeList[] = { L"自動", L"ダーク", L"ライト" };
 	for (LPCWSTR themeText : themeList) {
@@ -75,6 +85,7 @@ LRESULT ConfigDlg::OnOK(WORD, WORD wID, HWND, BOOL&)
 	m_config.popupRaceListWindow = m_popupRaceListWindow;
 	m_config.notifyFavoriteRaceHold = m_notifyFavoriteRaceHold;
 	m_config.theme = static_cast<Config::Theme>(m_theme);
+	m_config.dataLocale = static_cast<Config::DataLocale>(m_gameLanguage);
 	m_config.windowTopMost = m_windowTopMost;
 	m_config.screenShotFolder = (LPCWSTR)m_screenshotFolder;
 	m_config.screenCaptureMethod = static_cast<Config::ScreenCaptureMethod>(m_screenCaptureMethod);
@@ -102,7 +113,16 @@ void ConfigDlg::OnCheckUmaLibrary(UINT uNotifyCode, int nID, CWindow wndCtl)
 		}
 		json jsonCommon;
 		ifs >> jsonCommon;
-		std::string libraryURL = jsonCommon["Common"]["UmaMusumeLibraryURL"];
+		std::string libraryURL;
+		if (m_config.dataLocale == Config::kEN && jsonCommon["Common"].contains("UmaMusumeLibraryURL_EN")) {
+			libraryURL = jsonCommon["Common"]["UmaMusumeLibraryURL_EN"];
+		} else {
+			libraryURL = jsonCommon["Common"].value<std::string>("UmaMusumeLibraryURL", "");
+		}
+		if (libraryURL.empty()) {
+			MessageBox(L"Event library URL is not configured.");
+			return;
+		}
 		libraryURL += "?" + std::to_string(std::time(nullptr));	// キャッシュ取得回避
 
 		// ファイルサイズ取得

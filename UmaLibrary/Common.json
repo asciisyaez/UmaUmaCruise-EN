@@ -1,6 +1,7 @@
 {
     "Common": {
         "UmaMusumeLibraryURL":"https://raw.githubusercontent.com/amate/UmaUmaCruise/master/UmaLibrary/UmaMusumeLibrary_v2.json",
+        "UmaMusumeLibraryURL_EN":"https://raw.githubusercontent.com/asciisyaez/UmaUmaCruise-EN/main/UmaLibrary/UmaMusumeLibrary_EN.json",
 
         "TargetWindow": {
             "WindowName": "umamusume",

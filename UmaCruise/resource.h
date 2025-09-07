@@ -60,6 +60,7 @@
 #define IDC_RADIO_DESKTOPDUPLICATION    1071
 #define IDC_RADIO3                      1072
 #define IDC_RADIO_WINDOWSGRAPHICSCAPTURE 1072
+#define IDC_COMBO_GAMELANGUAGE           1073
 #define IDC_EDIT_OPTION1                1500
 #define IDC_EDIT_OPTION2                1501
 #define IDC_EDIT_OPTION3                1502
@@ -101,7 +102,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        211
 #define _APS_NEXT_COMMAND_VALUE         32775
-#define _APS_NEXT_CONTROL_VALUE         1071
+#define _APS_NEXT_CONTROL_VALUE         1074
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

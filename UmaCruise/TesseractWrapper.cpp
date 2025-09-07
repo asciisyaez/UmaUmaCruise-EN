@@ -24,6 +24,20 @@ namespace TesseractWrapper {
 
 	std::vector<std::shared_ptr<TextFromImageFunc>> s_cacheOCRFunction;
 
+	// Default to English for this EN-focused fork; can be switched at runtime.
+	static std::string s_language = "eng";
+
+	void SetLanguage(const char* langCode)
+	{
+		if (!langCode) return;
+		{
+			std::unique_lock<std::mutex> lock(s_mtx);
+			s_language = langCode;
+		}
+		// Clear cached engines so next OCR uses the new language
+		TesseractTerm();
+	}
+
 
 	bool TesseractInit()
 	{
@@ -55,7 +69,7 @@ namespace TesseractWrapper {
 		auto ptess = std::make_shared<tesseract::TessBaseAPI>();
 
 		auto dbFolderPath = GetExeDirectory() / L"tessdata";
-		if (ptess->Init(dbFolderPath.string().c_str(), "jpn")) {
+		if (ptess->Init(dbFolderPath.string().c_str(), s_language.c_str())) {
 			ERROR_LOG << L"Could not initialize tesseract.";
 			ATLASSERT(FALSE);
 			throw std::runtime_error("Could not initialize tesseract.");
@@ -100,7 +114,7 @@ namespace TesseractWrapper {
 			INFO_LOG << L"new tesseract::TessBaseAPI";
 			ptess.reset(new tesseract::TessBaseAPI);
 			auto dbFolderPath = GetExeDirectory() / L"tessdata";
-			if (ptess->Init(dbFolderPath.string().c_str(), "jpn")) {
+			if (ptess->Init(dbFolderPath.string().c_str(), s_language.c_str())) {
 				ERROR_LOG << L"Could not initialize tesseract.";
 				ATLASSERT(FALSE);
 				return L"";
@@ -136,7 +150,7 @@ namespace TesseractWrapper {
 			INFO_LOG << L"new tesseract::TessBaseAPI";
 			ptess.reset(new tesseract::TessBaseAPI);
 			auto dbFolderPath = GetExeDirectory() / L"tessdata" / L"best";
-			if (ptess->Init(dbFolderPath.string().c_str(), "jpn")) {
+			if (ptess->Init(dbFolderPath.string().c_str(), s_language.c_str())) {
 				ERROR_LOG << L"Could not initialize tesseract.";
 				ATLASSERT(FALSE);
 				return L"";

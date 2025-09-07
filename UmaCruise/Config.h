@@ -20,7 +20,13 @@ struct Config
 	};
 	ScreenCaptureMethod	screenCaptureMethod = kGDI;
 
+	// Game text/data locale for OCR and event library
+	enum DataLocale {
+		kJP = 0,
+		kEN = 1,
+	};
+	DataLocale dataLocale = kEN; // default to EN for this fork
+
 	bool	LoadConfig();
 	void	SaveConfig();
 };
-

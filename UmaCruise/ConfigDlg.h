@@ -63,6 +63,7 @@ private:
 	bool	m_popupRaceListWindow = false;
 	bool	m_notifyFavoriteRaceHold = true;
 	int		m_theme = Config::kAuto;
+	int		m_gameLanguage = Config::kEN; // 0: JP, 1: EN
 	bool	m_windowTopMost = false;
 	CString m_screenshotFolder;
 	int		m_screenCaptureMethod = Config::kGDI;

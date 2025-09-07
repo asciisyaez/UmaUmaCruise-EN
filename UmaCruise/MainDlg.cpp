@@ -20,6 +20,7 @@
 #include "WindowsGraphicsCaptureWrapper.h"
 
 #include "ConfigDlg.h"
+#include "TesseractWrapper.h"
 
 using json = nlohmann::json;
 using namespace CodeConvert;
@@ -123,6 +124,9 @@ LRESULT CMainDlg::OnInitDialog(UINT, WPARAM, LPARAM, BOOL&)
 	}
 
 	m_config.LoadConfig();
+
+	// Set OCR language based on data locale
+	TesseractWrapper::SetLanguage(m_config.dataLocale == Config::kEN ? "eng" : "jpn");
 
 	ChangeGlobalTheme(m_config.theme);
 
@@ -343,6 +347,7 @@ void CMainDlg::OnShowConfigDlg(UINT uNotifyCode, int nID, CWindow wndCtl)
 	const bool prevPopupRaceListWindow = m_config.popupRaceListWindow;
 	const int prevTheme = m_config.theme;
 	const int prevSCMethod = m_config.screenCaptureMethod;
+	const int prevLocale = m_config.dataLocale;
 	ConfigDlg dlg(m_config);
 	auto ret = dlg.DoModal(m_hWnd);
 	if (ret == IDOK) {
@@ -355,6 +360,11 @@ void CMainDlg::OnShowConfigDlg(UINT uNotifyCode, int nID, CWindow wndCtl)
 			m_raceListWindow.OnThemeChanged();
 			m_previewWindow.OnThemeChanged();
 			m_popupRichEdit.OnThemeChanged();
+		}
+		if (prevLocale != m_config.dataLocale) {
+			// Update OCR language and reload event library when locale changes
+			TesseractWrapper::SetLanguage(m_config.dataLocale == Config::kEN ? "eng" : "jpn");
+			_ReloadUmaMusumeLibrary(true);
 		}
 		if (prevSCMethod != m_config.screenCaptureMethod) {
 			std::unique_lock lock(m_mtxScreennShotWindow);
