@@ -1,0 +1,63 @@
+{
+  "Charactor": {
+    "3★": {
+      "Special Week": {
+        "Event": [
+          {
+            "A Trainer's Advice": [
+              { "Option": "Give it your best!", "Effect": "Stamina +10\nHint Lv +1" },
+              { "Option": "Don't overdo it.", "Effect": "Stamina +5" }
+            ]
+          },
+          {
+            "A Sunny Day": [
+              { "Option": "Go for a run", "Effect": "Speed +10" },
+              { "Option": "Study tactics", "Effect": "Power +5\nSkill Pt +15" }
+            ]
+          }
+        ]
+      },
+      "Silence Suzuka": {
+        "Event": [
+          {
+            "Silent Focus": [
+              { "Option": "Keep practicing", "Effect": "Speed +10" },
+              { "Option": "Take a short break", "Effect": "Stamina +10" }
+            ]
+          },
+          {
+            "Perfect Pace": [
+              { "Option": "Push the pace", "Effect": "Guts +8" },
+              { "Option": "Keep it steady", "Effect": "Power +8" }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "Support": {
+    "SSR": {
+      "El Condor Pasa": {
+        "Event": [
+          {
+            "Viva! El Condor!": [
+              { "Option": "Viva!", "Effect": "Power +10\nSkill Pt +10" },
+              { "Option": "Stay calm", "Effect": "Guts +10" }
+            ]
+          }
+        ]
+      },
+      "Rice Shower": {
+        "Event": [
+          {
+            "Blessing of Rice": [
+              { "Option": "Gracious bow", "Effect": "Stamina +10" },
+              { "Option": "Cheer loudly", "Effect": "Wisdom +10" }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}
+
