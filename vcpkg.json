@@ -12,10 +12,7 @@
             ]
         },
         {
-            "name": "tesseract",
-            "features": [
-                "cpu-independed"
-            ]
+            "name": "tesseract"
         },
         "wtl",
         "boost-algorithm",
